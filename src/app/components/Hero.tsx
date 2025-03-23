@@ -9,10 +9,6 @@ export default function Hero() {
   const headshotScale = useTransform(scrollY, [0, 200], [1, 0.5]);
   const headshotOpacity = useTransform(scrollY, [0, 200], [1, 0]);
 
-  // Animate the plane: start appearing around 150px and fully offscreen by 300px
-  const planeX = useTransform(scrollY, [150, 300], [0, 500]);
-  const planeOpacity = useTransform(scrollY, [150, 200, 300], [0, 1, 0]);
-
   return (
     <section
       id="hero"
@@ -29,7 +25,7 @@ export default function Hero() {
           whileHover={{ scale: 1.1, rotateX: 10, rotateY: -10 }}
           transition={{ type: "spring", stiffness: 300, damping: 20 }}
         >
-          Hey, I'm Aaron!
+          Hey, I&apos;m Aaron!
         </motion.h1>
 
         <motion.p

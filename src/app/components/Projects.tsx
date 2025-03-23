@@ -5,8 +5,17 @@ import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import StarField from "./StarField";
 
+
+type Project = {
+  title: string;
+  description: string;
+  image: string;
+  tech: string[];
+  details: string;
+};
+
 // Sample project data
-const projects = [
+const projects: Project[] = [
   { title: "LockedIn", description: "A sleek web app built with React & Next.js.", image: "/project1.jpg", tech: ["React", "Next.js", "TailwindCSS"], details: "This project is a modern, scalable web app using SSR and TailwindCSS." },
   { title: "RL Minesweeper Solver", description: "An AI-powered chatbot using OpenAI API.", image: "/project2.jpg", tech: ["Python", "FastAPI", "GPT-4"], details: "This chatbot leverages OpenAI's API to provide dynamic responses." },
   { title: "SimplySyncly", description: "An interactive WebGL-based site.", image: "/project3.jpg", tech: ["Three.js", "GSAP", "React"], details: "Uses Three.js for immersive 3D experiences and animations." },
@@ -20,13 +29,9 @@ const projects = [
 const allTech = Array.from(new Set(projects.flatMap((p) => p.tech)));
 
 // Helper: If there are fewer than count projects, return them; otherwise, return exactly count starting at index.
-function getDisplayedProjects(arr: any[], index: number, count: number) {
-  if (arr.length < count) return arr;
-  const result = [];
-  for (let i = 0; i < count; i++) {
-    result.push(arr[(index + i) % arr.length]);
-  }
-  return result;
+function getDisplayedProjects(arr: Project[], index: number, count: number) {
+  if (arr.length <= count) return arr;
+  return Array.from({ length: count }, (_, i) => arr[(index + i) % arr.length]);
 }
 
 export default function Projects() {
@@ -81,7 +86,7 @@ export default function Projects() {
 
         {/* Filter Buttons */}
         <div className="flex flex-wrap justify-center items-center gap-4 mb-8">
-          {allTech.map((tech) => (
+          {allTech.map((tech: string) => (
             <button
               key={tech}
               onClick={() => toggleTech(tech)}
@@ -153,7 +158,7 @@ export default function Projects() {
                         <h3 className="text-lg font-semibold text-white">{project.title}</h3>
                         <p className="text-gray-300 mt-2">{project.description}</p>
                         <div className="flex flex-wrap gap-2 mt-3">
-                          {project.tech.map((tech) => (
+                          {project.tech.map((tech: string) => (
                             <span key={tech} className="bg-black/40 px-3 py-1 rounded text-xs font-bold text-gray-200">
                               {tech}
                             </span>

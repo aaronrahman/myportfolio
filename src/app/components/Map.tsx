@@ -4,6 +4,7 @@ import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import { useState } from "react";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
+import Image from 'next/image';
 
 // Sample locations data
 const locations = [
@@ -190,14 +191,14 @@ export default function Map() {
 
   // Create a custom DivIcon based on whether the marker is highlighted
   const createCustomIcon = (isHighlighted: boolean) => {
-    const size = isHighlighted ? [40, 50] : [30, 40];
-    const anchor = isHighlighted ? [20, 50] : [15, 40];
+    const size: [number, number] = isHighlighted ? [40, 50] : [30, 40];
+    const anchor: [number, number] = isHighlighted ? [20, 50] : [15, 40];
     return new L.DivIcon({
       html: pinSvg,
       className: isHighlighted ? "custom-pin highlighted" : "custom-pin",
       iconSize: size,
       iconAnchor: anchor,
-      popupAnchor: [0, -anchor[1]],
+      popupAnchor: [0, -anchor[1]] as [number, number],
     });
   };
 
@@ -205,7 +206,7 @@ export default function Map() {
     <section id="map" className="min-h-screen flex flex-col items-center justify-center text-center p-10">
       {/* Animated Gradient Title */}
       <h2 className="mb-8 text-5xl font-bold gradient-title">
-        Places I've Been
+        Places I&apos;ve Been
       </h2>
       <div className="mt-6 w-full h-[500px] md:w-3/4">
         <MapContainer center={[43.65107, -79.347015]} zoom={3} className="w-full h-full rounded-lg">
@@ -224,7 +225,7 @@ export default function Map() {
             >
               <Popup>
                 <h3 className="text-xl font-semibold">{location.title}</h3>
-                <img
+                <Image
                   src={location.imageUrl}
                   alt={location.title}
                   className="w-full h-48 object-cover rounded-md mt-2"

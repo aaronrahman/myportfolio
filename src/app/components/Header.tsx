@@ -32,7 +32,7 @@ export default function Header() {
     >
       <div className="container mx-auto flex items-center justify-between">
         <Link href="/" className="text-2xl font-bold text-[var(--color-foreground)]">
-          Aaron's Portfolio
+          Aaron&apos;s Portfolio
         </Link>
 
         {/* Desktop Navigation */}
