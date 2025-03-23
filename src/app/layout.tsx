@@ -1,12 +1,6 @@
 import type { Metadata } from "next";
-import Header from "./components/Header";
-import Hero from "./components/Hero";
-import StarField from "./components/StarField";
-import Projects from "./components/Projects";
-import Map from "./components/Map";
-import Music from "./components/Music";
-import Contact from "./components/Contact";
 import "./globals.css";
+import ClientLayout from "./ClientLayout";
 
 export const metadata: Metadata = {
   title: "Aaron's Portfolio",
@@ -19,14 +13,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="antialiased">
-        <StarField />
-        <Header />
-        <Hero />
-        <Projects />
-        <Map />
-        <Music />
-        <Contact />
-        <main>{children}</main>
+        <ClientLayout>{children}</ClientLayout>
       </body>
     </html>
   );

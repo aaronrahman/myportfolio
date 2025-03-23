@@ -9,6 +9,7 @@ export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
+    // This code runs only on the client
     if (typeof window !== "undefined") {
       const handleScroll = () => {
         setScrolled(window.scrollY > 50);
@@ -19,9 +20,11 @@ export default function Header() {
   }, []);
 
   const smoothScroll = (id: string) => {
-    const section = document.querySelector(id);
-    if (section) {
-      section.scrollIntoView({ behavior: "smooth" });
+    if (typeof window !== "undefined") {
+      const section = document.querySelector(id);
+      if (section) {
+        section.scrollIntoView({ behavior: "smooth" });
+      }
     }
     setMenuOpen(false); // Close mobile menu
   };
@@ -39,11 +42,21 @@ export default function Header() {
 
         {/* Desktop Navigation */}
         <nav className="hidden md:flex space-x-6 text-lg">
-          <button onClick={() => smoothScroll("#hero")} className="hover:text-[var(--color-secondary)] transition font-bold">Home</button>
-          <button onClick={() => smoothScroll("#projects")} className="hover:text-[var(--color-secondary)] transition font-bold">Projects</button>
-          <button onClick={() => smoothScroll("#map")} className="hover:text-[var(--color-secondary)] transition font-bold">Places</button>
-          <button onClick={() => smoothScroll("#music")} className="hover:text-[var(--color-secondary)] transition font-bold">Music</button>
-          <button onClick={() => smoothScroll("#contact")} className="hover:text-[var(--color-secondary)] transition font-bold">Contact</button>
+          <button onClick={() => smoothScroll("#hero")} className="hover:text-[var(--color-secondary)] transition font-bold">
+            Home
+          </button>
+          <button onClick={() => smoothScroll("#projects")} className="hover:text-[var(--color-secondary)] transition font-bold">
+            Projects
+          </button>
+          <button onClick={() => smoothScroll("#map")} className="hover:text-[var(--color-secondary)] transition font-bold">
+            Places
+          </button>
+          <button onClick={() => smoothScroll("#music")} className="hover:text-[var(--color-secondary)] transition font-bold">
+            Music
+          </button>
+          <button onClick={() => smoothScroll("#contact")} className="hover:text-[var(--color-secondary)] transition font-bold">
+            Contact
+          </button>
         </nav>
 
         {/* Mobile Menu Toggle */}
