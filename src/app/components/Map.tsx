@@ -4,22 +4,28 @@ import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 import "leaflet/dist/leaflet.css";
 import Image from "next/image";
-import type { Icon } from "leaflet";
 
 // Dynamically import react-leaflet components to avoid SSR issues
-const MapContainer = dynamic(() => import("react-leaflet").then((mod) => mod.MapContainer), { ssr: false });
-const TileLayer = dynamic(() => import("react-leaflet").then((mod) => mod.TileLayer), { ssr: false });
-const Marker = dynamic(() => import("react-leaflet").then((mod) => mod.Marker), { ssr: false });
-const Popup = dynamic(() => import("react-leaflet").then((mod) => mod.Popup), { ssr: false });
+const MapContainer = dynamic(
+  () => import("react-leaflet").then((mod) => mod.MapContainer),
+  { ssr: false }
+);
+const TileLayer = dynamic(
+  () => import("react-leaflet").then((mod) => mod.TileLayer),
+  { ssr: false }
+);
+const Marker = dynamic(
+  () => import("react-leaflet").then((mod) => mod.Marker),
+  { ssr: false }
+);
+const Popup = dynamic(
+  () => import("react-leaflet").then((mod) => mod.Popup),
+  { ssr: false }
+);
 
+// We'll load Leaflet on the client via a useEffect
 let L: typeof import("leaflet") | null = null;
-if (typeof window !== "undefined") {
-  import("leaflet").then((leaflet) => {
-    L = leaflet;
-  });
-}
 
-// Type for locations
 type Location = {
   lat: number;
   lng: number;
@@ -28,7 +34,6 @@ type Location = {
   imageUrl: string;
 };
 
-// Sample locations data
 const locations: Location[] = [
   {
     lat: 43.65107,
@@ -197,31 +202,45 @@ const locations: Location[] = [
     description: "Amazing city with endless possibilities!",
     imageUrl: "/nyc.jpg", // Replace with your actual image in public folder
   },
+
+
+  
   
 ];
 
 export default function Map() {
   const [highlightedLocation, setHighlightedLocation] = useState<number | null>(null);
-  const [customIcon, setCustomIcon] = useState<L.DivIcon | null>(null);
+  const [leafletLoaded, setLeafletLoaded] = useState(false);
 
-
+  // Load Leaflet on the client
   useEffect(() => {
-    if (L) {
-      const pinSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="30" height="40" fill="#FF5733">
-        <path d="M12 2C8.13 2 5 5.13 5 9c0 3.54 3 7.75 7 12.13 4-4.38 7-8.59 7-12.13 0-3.87-3.13-7-7-7zM12 12.25c-1.48 0-2.67-1.19-2.67-2.67S10.52 7.92 12 7.92s2.67 1.19 2.67 2.67-1.19 2.66-2.67 2.66z"/>
-      </svg>`;
-
-      setCustomIcon(
-        L.divIcon({
-          html: pinSvg,
-          className: "custom-pin",
-          iconSize: [30, 40],
-          iconAnchor: [15, 40],
-          popupAnchor: [0, -40],
-        })
-      );
+    if (typeof window !== "undefined") {
+      import("leaflet").then((leaflet) => {
+        L = leaflet;
+        setLeafletLoaded(true);
+      });
     }
   }, []);
+
+  // Helper: Return a custom icon for the marker, with a different style if highlighted.
+  const getCustomIcon = (index: number): L.DivIcon | undefined => {
+    if (!L) return undefined;
+    const pinSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="30" height="40" fill="#FF5733">
+      <path d="M12 2C8.13 2 5 5.13 5 9c0 3.54 3 7.75 7 12.13 4-4.38 7-8.59 7-12.13 0-3.87-3.13-7-7-7zM12 12.25c-1.48 0-2.67-1.19-2.67-2.67S10.52 7.92 12 7.92s2.67 1.19 2.67 2.67-1.19 2.66-2.67 2.66z"/>
+    </svg>`;
+
+    const isHighlighted = index === highlightedLocation;
+    const size: [number, number] = isHighlighted ? [40, 50] : [30, 40];
+    const anchor: [number, number] = isHighlighted ? [20, 50] : [15, 40];
+
+    return L.divIcon({
+      html: pinSvg,
+      className: isHighlighted ? "custom-pin highlighted" : "custom-pin",
+      iconSize: size,
+      iconAnchor: anchor,
+      popupAnchor: [0, -anchor[1]] as [number, number],
+    });
+  };
 
   return (
     <section id="map" className="min-h-screen flex flex-col items-center justify-center text-center p-10">
@@ -229,17 +248,17 @@ export default function Map() {
         Places I&apos;ve Been
       </h2>
       <div className="mt-6 w-full h-[500px] md:w-3/4">
-        <MapContainer center={[43.65107, -79.347015]} zoom={3} className="w-full h-full rounded-lg">
-          <TileLayer
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          />
-          {customIcon &&
-            locations.map((location, index) => (
+        {leafletLoaded && (
+          <MapContainer center={[43.65107, -79.347015]} zoom={3} className="w-full h-full rounded-lg">
+            <TileLayer
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            />
+            {locations.map((location, index) => (
               <Marker
                 key={index}
                 position={[location.lat, location.lng]}
-                icon={customIcon}
+                icon={getCustomIcon(index) ?? undefined}
                 eventHandlers={{
                   click: () => setHighlightedLocation(index),
                 }}
@@ -249,18 +268,18 @@ export default function Map() {
                   <Image
                     src={location.imageUrl}
                     alt={location.title}
-                    width={200} 
-                    height={150}
+                    width={300}
+                    height={200}
                     className="w-full h-48 object-cover rounded-md mt-2"
                   />
                   <p className="mt-2">{location.description}</p>
                 </Popup>
               </Marker>
             ))}
-        </MapContainer>
+          </MapContainer>
+        )}
       </div>
 
-      {/* CSS Styling */}
       <style jsx>{`
         .gradient-title {
           background: linear-gradient(90deg, #5B21B6, #7DF9FF);
@@ -275,6 +294,10 @@ export default function Map() {
           to {
             opacity: 1;
           }
+        }
+        .custom-pin.highlighted {
+          transform: scale(1.2);
+          transition: transform 0.3s ease;
         }
       `}</style>
     </section>
