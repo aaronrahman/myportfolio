@@ -4,6 +4,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import StarField from "./StarField";
+import React from "react";
+
 
 type Project = {
   title: string;
@@ -81,7 +83,7 @@ function getDisplayedProjects(arr: Project[], index: number, count: number): Pro
 }
 
 // Helper function to parse project.details text and convert URLs into clickable links.
-function parseDetails(details: string): JSX.Element[] {
+function parseDetails(details: string): React.ReactNode[] {
   const urlRegex = /(https?:\/\/[^\s]+)/g;
   const parts = details.split(urlRegex);
   return parts.map((part, idx) => {
