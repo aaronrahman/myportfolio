@@ -5,7 +5,6 @@ import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import StarField from "./StarField";
 
-
 type Project = {
   title: string;
   description: string;
@@ -14,24 +13,93 @@ type Project = {
   details: string;
 };
 
-// Sample project data
 const projects: Project[] = [
-  { title: "LockedIn", description: "A sleek web app built with React & Next.js.", image: "/project1.jpg", tech: ["React", "Next.js", "TailwindCSS"], details: "This project is a modern, scalable web app using SSR and TailwindCSS." },
-  { title: "RL Minesweeper Solver", description: "An AI-powered chatbot using OpenAI API.", image: "/project2.jpg", tech: ["Python", "FastAPI", "GPT-4"], details: "This chatbot leverages OpenAI's API to provide dynamic responses." },
-  { title: "SimplySyncly", description: "An interactive WebGL-based site.", image: "/project3.jpg", tech: ["Three.js", "GSAP", "React"], details: "Uses Three.js for immersive 3D experiences and animations." },
-  { title: "Harmony AI", description: "Visualizes music data in a sci-fi way.", image: "/project4.jpg", tech: ["Python", "Django", "WebSockets"], details: "Streams and analyzes music frequency data in real-time." },
-  { title: "Space-C", description: "A full-stack shopping experience.", image: "/project5.jpg", tech: ["Node.js", "Express", "MongoDB"], details: "Built with a Node.js backend and a secure user authentication system." },
-  { title: "Portfolio Website", description: "A portfolio website showcasing my projects.", image: "/project6.jpg", tech: ["Next.js", "TailwindCSS"], details: "Modern portfolio with animations and interactivity." },
-  { title: "IWantToListenToEverything", description: "A platform to share music.", image: "/project7.jpg", tech: ["React", "Node.js"], details: "Allows users to listen to curated tracks and share their favorites." },
+  { 
+    title: "LockedIn", 
+    description: "An all-in-one study app", 
+    image: "/LockedIn.png", 
+    tech: ["Streamlit", "Python", "Mediapipe", "Google Vertex Gen AI", "Google Cloud", "HTML"], 
+    details: "Boost your productivity with our all-in-one study app! Featuring an AI study buddy, posture tracking, and stretch reminders to keep you focused, healthy, and on track to reach your goals. \n https://devpost.com/software/lockedin-k35v4y" 
+  },
+  { 
+    title: "RL Minesweeper Solver", 
+    description: "A minesweeper solver trained using DDQN with Prioritized Experience Replay", 
+    image: "/minesweeper.png", 
+    tech: ["Python", "Numpy", "Tensorflow", "Matplotlib", "Gym", "Google Colab"], 
+    details: "A Minesweeper solver using Double Deep Q-Networks with Prioritized Experience Replay to improve decision-making efficiency. The agent learns optimal move selection by interacting with the game environment, reducing overestimation bias with DDQN and accelerating learning with PER." 
+  },
+  { 
+    title: "SimplySyncly", 
+    description: "A way for students to link their schedules with their friends!", 
+    image: "/simplySyncly.png", 
+    tech: ["C", "Qt", "Google Test"], 
+    details: "By automatically syncing users' work, study, and extracurricular calendars, the app makes it easier to identify mutually available times for socializing while ensuring users stay on top of their responsibilities." 
+  },
+  { 
+    title: "Harmony AI", 
+    description: "Harmony AI is a therapeutic speech-to-text chatbot that replies to you using text-to-speech.", 
+    image: "/harmonyAI.png", 
+    tech: ["Typescript", "Next.js", "Node.js", "React"], 
+    details: "Harmony AI is a cutting-edge speech-to-text therapy bot that is designed to provide mental health support to individuals who may be struggling with the isolation and stress caused by the pandemic. The bot is trained to understand and respond to spoken language in real-time, allowing users to have a more natural and conversational experience with the AI." 
+  },
+  { 
+    title: "Space C", 
+    description: "An educational space-themed children's game", 
+    image: "/spaceC.png", 
+    tech: ["Java", "JavaFX"], 
+    details: "Space C is an engaging space-themed game designed to provide users with an entertaining platform to explore and deepen their understanding of the solar system" 
+  },
+  { 
+    title: "Portfolio Website", 
+    description: "A portfolio website showcasing me, Aaron!", 
+    image: "/portfolio.png", 
+    tech: ["Next.js", "Typescript", "TailwindCSS", "React", "Spotify API", "Vercel"], 
+    details: "My portfolio that showcases my projects, the places I've traveled to, and the music in my life!" 
+  },
+  { 
+    title: "IWantToListenToEverything", 
+    description: "A spotify playlist that showcases every song I've ever listened to", 
+    image: "/iWantToListenToEverything.png", 
+    tech: ["Javascript", "Spotify API"], 
+    details: "I want to listen to as much music as possible, but I also wanted to be able to keep track of every song I've ever listened to. To solve this, I coded a solution that adds any song I listen to on Spotify into this playlist." 
+  },
 ];
 
 // Get unique tech values from projects
 const allTech = Array.from(new Set(projects.flatMap((p) => p.tech)));
 
+// For OR logic: Filter projects if at least one tech is included.
+function filterProjects(arr: Project[], selectedTech: string[]): Project[] {
+  if (selectedTech.length === 0) return arr;
+  return arr.filter((p) => selectedTech.some((tech) => p.tech.includes(tech)));
+}
+
 // Helper: If there are fewer than count projects, return them; otherwise, return exactly count starting at index.
-function getDisplayedProjects(arr: Project[], index: number, count: number) {
+function getDisplayedProjects(arr: Project[], index: number, count: number): Project[] {
   if (arr.length <= count) return arr;
   return Array.from({ length: count }, (_, i) => arr[(index + i) % arr.length]);
+}
+
+// Helper function to parse project.details text and convert URLs into clickable links.
+function parseDetails(details: string): JSX.Element[] {
+  const urlRegex = /(https?:\/\/[^\s]+)/g;
+  const parts = details.split(urlRegex);
+  return parts.map((part, idx) => {
+    if (urlRegex.test(part)) {
+      return (
+        <a
+          key={idx}
+          href={part}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="underline hover:text-blue-300 break-words"
+        >
+          {part}
+        </a>
+      );
+    }
+    return <span key={idx} className="break-words">{part}</span>;
+  });
 }
 
 export default function Projects() {
@@ -39,13 +107,9 @@ export default function Projects() {
   const [flippedIndex, setFlippedIndex] = useState<number | null>(null);
   const [selectedTech, setSelectedTech] = useState<string[]>([]);
 
-  const filteredProjects = selectedTech.length > 0
-    ? projects.filter((p) => selectedTech.every((tech) => p.tech.includes(tech)))
-    : projects;
-
+  const filteredProjects = filterProjects(projects, selectedTech);
   const displayedProjects = getDisplayedProjects(filteredProjects, index, 3);
 
-  // Arrow functions: left arrow calls prevSlide, right arrow calls nextSlide.
   const prevSlide = () => {
     if (filteredProjects.length >= 3) {
       setIndex((prev) => (prev - 1 + filteredProjects.length) % filteredProjects.length);
@@ -100,86 +164,85 @@ export default function Projects() {
           ))}
         </div>
 
-        {filteredProjects.length === 0 ? (
-          <p className="text-xl text-gray-300">No projects match the selected technologies.</p>
-        ) : (
-          <div className="relative flex items-center justify-center">
-            {filteredProjects.length > 1 && (
-              <>
-                {/* Left Arrow (calls nextSlide) */}
-                <button
-                  onClick={nextSlide}
-                  className="absolute left-[-50px] top-1/2 transform -translate-y-1/2 p-3 bg-black/60 rounded-full hover:bg-gradient-to-r hover:from-purple-500 hover:to-pink-500 hover:text-white transition"
-                >
-                  <ChevronLeft size={36} className="text-white" />
-                </button>
-                {/* Right Arrow (calls prevSlide) */}
-                <button
-                  onClick={prevSlide}
-                  className="absolute right-[-50px] top-1/2 transform -translate-y-1/2 p-3 bg-black/60 rounded-full hover:bg-gradient-to-r hover:from-purple-500 hover:to-pink-500 hover:text-white transition"
-                >
-                  <ChevronRight size={36} className="text-white" />
-                </button>
-              </>
-            )}
+        {/* Only show arrows if there are more than 3 projects */}
+        <div className="relative flex items-center justify-center">
+          {filteredProjects.length > 3 && (
+            <>
+              {/* Left Arrow (calls nextSlide) */}
+              <button
+                onClick={nextSlide}
+                className="absolute left-[-50px] top-1/2 transform -translate-y-1/2 p-3 bg-black/60 rounded-full hover:bg-gradient-to-r hover:from-purple-500 hover:to-pink-500 hover:text-white transition"
+              >
+                <ChevronLeft size={36} className="text-white" />
+              </button>
+              {/* Right Arrow (calls prevSlide) */}
+              <button
+                onClick={prevSlide}
+                className="absolute right-[-50px] top-1/2 transform -translate-y-1/2 p-3 bg-black/60 rounded-full hover:bg-gradient-to-r hover:from-purple-500 hover:to-pink-500 hover:text-white transition"
+              >
+                <ChevronRight size={36} className="text-white" />
+              </button>
+            </>
+          )}
 
-            <div className="flex justify-center items-center gap-6">
-              <AnimatePresence mode="popLayout">
-                {displayedProjects.map((project, i) => (
+          <div className="flex justify-center items-center gap-6">
+            <AnimatePresence mode="popLayout">
+              {displayedProjects.map((project, i) => (
+                <motion.div
+                  key={project.title + "_" + index + "_" + i}
+                  initial={{ opacity: 0, scale: 0.95, x: 50 }}
+                  animate={{ opacity: 1, scale: 1, x: 0 }}
+                  exit={{ opacity: 0, scale: 0.95, x: -50 }}
+                  transition={{ type: "spring", stiffness: 80, damping: 15 }}
+                  className="relative rounded-2xl p-6 shadow-2xl w-[300px] h-[420px] transition-all duration-500 perspective-1000 cursor-pointer group mx-4"
+                  onClick={() => setFlippedIndex(flippedIndex === i ? null : i)}
+                  style={{
+                    background: "url('/noise.png'), linear-gradient(135deg, #2e2e2e, #1a1a1a)",
+                    backgroundSize: "cover",
+                    backgroundBlendMode: "overlay",
+                    borderWidth: "5px",
+                    borderStyle: "solid",
+                    borderImage: "linear-gradient(135deg, rgba(255,0,150,0.8), rgba(0,229,255,0.8)) 1",
+                  }}
+                >
                   <motion.div
-                    key={project.title + "_" + index + "_" + i}
-                    initial={{ opacity: 0, scale: 0.95, x: 50 }}
-                    animate={{ opacity: 1, scale: 1, x: 0 }}
-                    exit={{ opacity: 0, scale: 0.95, x: -50 }}
-                    transition={{ type: "spring", stiffness: 80, damping: 15 }}
-                    className="relative rounded-2xl p-6 shadow-2xl w-[300px] h-[420px] transition-all duration-500 perspective-1000 cursor-pointer group mx-4"
-                    onClick={() => setFlippedIndex(flippedIndex === i ? null : i)}
-                    style={{
-                      background: "url('/noise.png'), linear-gradient(135deg, #2e2e2e, #1a1a1a)",
-                      backgroundSize: "cover",
-                      backgroundBlendMode: "overlay",
-                      borderWidth: "5px",
-                      borderStyle: "solid",
-                      borderImage: "linear-gradient(135deg, rgba(255,0,150,0.8), rgba(0,229,255,0.8)) 1",
-                    }}
+                    className="relative w-full h-full transform-style-3d"
+                    animate={{ rotateY: flippedIndex === i ? 360 : 0 }}
+                    transition={{ duration: 0.6, ease: "easeInOut" }}
                   >
+                    {/* Front Side */}
                     <motion.div
-                      className="relative w-full h-full transform-style-3d"
-                      animate={{ rotateY: flippedIndex === i ? 360 : 0 }}
-                      transition={{ duration: 0.6, ease: "easeInOut" }}
+                      className={`absolute w-full h-full backface-hidden flex flex-col items-center justify-center ${
+                        flippedIndex === i ? "hidden" : "block"
+                      }`}
                     >
-                      {/* Front Side */}
-                      <motion.div
-                        className={`absolute w-full h-full backface-hidden flex flex-col items-center justify-center ${
-                          flippedIndex === i ? "hidden" : "block"
-                        }`}
-                      >
-                        <Image src={project.image} width={280} height={150} alt={project.title} className="rounded-lg mb-4 shadow-md" />
-                        <h3 className="text-lg font-semibold text-white">{project.title}</h3>
-                        <p className="text-gray-300 mt-2">{project.description}</p>
-                        <div className="flex flex-wrap gap-2 mt-3">
-                          {project.tech.map((tech: string) => (
-                            <span key={tech} className="bg-black/40 px-3 py-1 rounded text-xs font-bold text-gray-200">
-                              {tech}
-                            </span>
-                          ))}
-                        </div>
-                      </motion.div>
-                      {/* Back Side */}
-                      <motion.div
-                        className="absolute w-full h-full backface-hidden flex flex-col justify-center items-center text-center p-4 rounded-2xl bg-gradient-to-br from-purple-800 to-pink-700 shadow-xl transform rotateY-180"
-                        style={{ display: flippedIndex === i ? "flex" : "none" }}
-                      >
-                        <h3 className="text-lg font-bold text-white mb-2">{project.title}</h3>
-                        <p className="text-gray-200">{project.details}</p>
-                      </motion.div>
+                      <Image src={project.image} width={280} height={150} alt={project.title} className="rounded-lg mb-4 shadow-md" />
+                      <h3 className="text-lg font-semibold text-white">{project.title}</h3>
+                      <p className="text-gray-300 mt-2">{project.description}</p>
+                      <div className="flex flex-wrap justify-center gap-2 mt-3">
+                        {project.tech.map((tech: string, idx: number) => (
+                          <span key={idx} className="bg-black/40 px-3 py-1 rounded text-xs font-bold text-gray-200">
+                            {tech}
+                          </span>
+                        ))}
+                      </div>
+                    </motion.div>
+                    {/* Back Side */}
+                    <motion.div
+                      className="absolute w-full h-full backface-hidden flex flex-col justify-center items-center text-center p-4 rounded-2xl bg-gradient-to-br from-purple-800 to-pink-700 shadow-xl transform rotateY-180"
+                      style={{ display: flippedIndex === i ? "flex" : "none" }}
+                    >
+                      <h3 className="text-lg font-bold text-black mb-3">{project.title}</h3>
+                      <div className="text-gray-200 font-bold max-w-[200px] text-xs">
+                        {parseDetails(project.details)}
+                      </div>
                     </motion.div>
                   </motion.div>
-                ))}
-              </AnimatePresence>
-            </div>
+                </motion.div>
+              ))}
+            </AnimatePresence>
           </div>
-        )}
+        </div>
       </div>
 
       <style jsx>{`
