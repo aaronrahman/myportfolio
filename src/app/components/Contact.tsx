@@ -35,17 +35,17 @@ const Contact = () => {
   transition={{ duration: 0.6 }}
 >
   <ContactButton
-    href="mailto:your-email@example.com"
+    href="mailto:aaronsrahman@gmail.com"
     icon={<FaEnvelope size={20} />}
     label="Email "
   />
   <ContactButton
-    href="https://www.linkedin.com/in/your-profile"
+    href="https://www.linkedin.com/in/aaronrahman/"
     icon={<FaLinkedin size={20} />}
     label="LinkedIn"
   />
   <ContactButton
-    href="https://github.com/your-github"
+    href="https://github.com/aaronrahman"
     icon={<FaGithub size={20} />}
     label="GitHub"
   />
