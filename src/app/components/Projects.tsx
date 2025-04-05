@@ -1,11 +1,10 @@
 "use client";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import StarField from "./StarField";
 import React from "react";
-
 
 type Project = {
   title: string;
@@ -24,11 +23,11 @@ const projects: Project[] = [
     details: "Boost your productivity with our all-in-one study app! Featuring an AI study buddy, posture tracking, and stretch reminders to keep you focused, healthy, and on track to reach your goals. \n https://devpost.com/software/lockedin-k35v4y" 
   },
   { 
-    title: "RL Minesweeper Solver", 
-    description: "A minesweeper solver trained using DDQN with Prioritized Experience Replay", 
-    image: "/minesweeper.png", 
-    tech: ["Python", "Numpy", "Tensorflow", "Matplotlib", "Gym", "Google Colab"], 
-    details: "A Minesweeper solver using Double Deep Q-Networks with Prioritized Experience Replay to improve decision-making efficiency. The agent learns optimal move selection by interacting with the game environment, reducing overestimation bias with DDQN and accelerating learning with PER." 
+    title: "NBA Playoff Predictor", 
+    description: "An NBA playoff predictor trained using XGBoost and a curated dataset", 
+    image: "/nbaBracket.jpeg", 
+    tech: ["Python", "Scikit-learn", "Pandas", "Matplotlib", "XGBoost", "Google Colab"], 
+    details: "Predicted the outcome of NBA first-round playoffs with 71% accuracy by leveraging individual player statistics rather than traditional team-level data, providing a more granular approach to game prediction" 
   },
   { 
     title: "SimplySyncly", 
@@ -172,14 +171,14 @@ export default function Projects() {
             <>
               {/* Left Arrow (calls nextSlide) */}
               <button
-                onClick={nextSlide}
+                onClick={prevSlide}
                 className="absolute left-[-50px] top-1/2 transform -translate-y-1/2 p-3 bg-black/60 rounded-full hover:bg-gradient-to-r hover:from-purple-500 hover:to-pink-500 hover:text-white transition"
               >
                 <ChevronLeft size={36} className="text-white" />
               </button>
               {/* Right Arrow (calls prevSlide) */}
               <button
-                onClick={prevSlide}
+                onClick={nextSlide}
                 className="absolute right-[-50px] top-1/2 transform -translate-y-1/2 p-3 bg-black/60 rounded-full hover:bg-gradient-to-r hover:from-purple-500 hover:to-pink-500 hover:text-white transition"
               >
                 <ChevronRight size={36} className="text-white" />
