@@ -72,7 +72,7 @@ const locations: Location[] = [
     lat: 38.9072,
     lng: -77.0369,
     title: "Washington D.C., USA",
-    description: "I have family that lives nearby so I've been able to visit a few times, and there's always been so much history to learn! I love all of the museums, especially the National Portrait Gallery. Can't wait to visiit again soon!",
+    description: "I have family that lives nearby so I've been able to visit a few times, and there's always been so much history to learn! I love all of the museums, especially the National Portrait Gallery. Can't wait to visit again soon!",
     imageUrl: "/washingtonDC.jpg", 
   },
 
