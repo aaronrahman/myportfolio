@@ -72,7 +72,7 @@ const locations: Location[] = [
     lat: 38.9072,
     lng: -77.0369,
     title: "Washington D.C., USA",
-    description: "Amazing city with endless possibilities!",
+    description: "I have family that lives nearby so I've been able to visit a few times, and there's always been so much history to learn! I love all of the museums, especially the National Portrait Gallery. Can't wait to visiit again soon!",
     imageUrl: "/washingtonDC.jpg", 
   },
 
@@ -116,13 +116,13 @@ const locations: Location[] = [
     imageUrl: "/puntaCana.jpg", 
   },
 
-  {
+  /*{
     lat: 48.8575,
     lng: 2.3514,
     title: "Paris, France",
-    description: "Amazing city with endless possibilities!",
+    description: "",
     imageUrl: "/paris.jpg", 
-  },
+  },*/
 
   {
     lat: 51.5072,
@@ -144,7 +144,7 @@ const locations: Location[] = [
     lat: 43.2380,
     lng: 76.8829,
     title: "Almaty, Kazakhstan",
-    description: "Amazing city with endless possibilities!",
+    description: "I have family that lives in Almaty, so about 10 years ago my parents and I went to visit them for about a month. Although it was a while ago, I remember the vibrant city and the endless mountains that were visible from almost any point. ",
     imageUrl: "/almaty.jpg", 
   },
 
@@ -164,13 +164,13 @@ const locations: Location[] = [
     imageUrl: "/munich.jpg", 
   },
 
-  {
+ /* {
     lat: 50.0755,
     lng: 14.4378,
     title: "Prague, Czech Republic",
     description: "Amazing city with endless possibilities!",
     imageUrl: "/prague.jpg", 
-  },
+  },*/
 
   {
     lat: 47.8014,
@@ -204,13 +204,13 @@ const locations: Location[] = [
     imageUrl: "/como.jpg", 
   },
 
-  {
+  /*{
     lat: 36.8969,
     lng: 30.7133,
     title: "Antalya, Turkey",
     description: "Amazing city with endless possibilities!",
     imageUrl: "/antalya.jpg",
-  },
+  },*/
 
 
   
