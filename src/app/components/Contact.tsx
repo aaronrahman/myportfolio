@@ -111,15 +111,15 @@ const ResumeModal = ({ onClose }: { onClose: () => void }) => {
           &times;
         </button>
         <iframe
-          src="/resume.pdf"
+          src="/Aaron_Rahman_Resume.pdf"
           title="Resume"
           className="w-full h-full rounded-xl"
           style={{ border: "none" }}
         ></iframe>
         <div className="mt-4 text-right">
           <a
-            href="/resume.pdf"
-            download="Resume.pdf"
+            href="/Aaron_Rahman_Resume.pdf"
+            download="Aaron_Rahman_Resume.pdf"
             className="inline-block bg-gradient-to-r from-green-400 to-teal-500 text-white font-semibold py-2 px-4 rounded-lg shadow-lg hover:shadow-2xl transition-all duration-300"
           >
             Download PDF
