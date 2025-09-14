@@ -49,7 +49,7 @@ export default function Header() {
             Projects
           </button>
           <button onClick={() => smoothScroll("#map")} className="hover:text-[var(--color-secondary)] transition font-bold">
-            Places
+            Travelling
           </button>
           <button onClick={() => smoothScroll("#music")} className="hover:text-[var(--color-secondary)] transition font-bold">
             Music
